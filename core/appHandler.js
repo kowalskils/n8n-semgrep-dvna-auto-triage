@@ -246,3 +246,4 @@ module.exports.bulkProducts =  function(req, res) {
 		res.render('app/bulkproducts',{messages:{danger:'Invalid file'},legacy:false})
 	}
 }
+
