@@ -6,6 +6,7 @@ var ejs = require('ejs')
 var morgan = require('morgan')
 const fileUpload = require('express-fileupload');
 var config = require('./config/server')
+const crypto = require("crypto");
 
 //Initialize Express
 var app = express()
@@ -15,6 +16,16 @@ app.set('view engine','ejs')
 app.use(morgan('tiny'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(fileUpload());
+
+
+
+app.get("/hash", (req, res) => {
+  const data = req.query.data;
+
+  const hash = crypto.createHash("md5").update(data).digest("hex");
+
+  res.send(hash);
+});
 
 // Enable for Reverse proxy support
 // app.set('trust proxy', 1) 
