@@ -1,38 +1,43 @@
+name: Semgrep Security Scan
+
 on:
-  workflow_dispatch: {}
-  pull_request: {}
+  workflow_dispatch:
+  pull_request:
   push:
     branches:
-    - main
-    - master
-    paths:
-    - .github/workflows/semgrep.yml
+      - main
+      - master
   schedule:
-  # random HH:MM to avoid a load spike on GitHub Actions at 00:00
-  - cron: 20 11 * * *
-name: Semgrep Security Scan
+    - cron: '20 11 * * *'
+
 jobs:
   semgrep:
-    name: semgrep/ci
+    name: semgrep-ci
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
-    env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
     container:
       image: semgrep/semgrep
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Semgrep Scan
-        uses: returntocorp/semgrep-action@v1
-        with:
-          config: "p/security-audit"
-
-      - name: Export findings JSON
+      - name: Run aggressive Semgrep scan
         run: |
-          semgrep --config=p/security-audit --json > semgrep-report.json
+          semgrep \
+          --config=p/nodejs \
+          --config=p/javascript \
+          --config=p/owasp-top-ten \
+          --config=p/secrets \
+          --exclude semgrep-report.json \
+          --json > semgrep-report.json
+
+      - name: Print findings count
+        run: |
+          cat semgrep-report.json | jq '.results | length'
 
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
@@ -42,6 +47,6 @@ jobs:
 
       - name: Send findings to n8n webhook
         run: |
-          curl -X POST ${{ secrets.N8N_WEBHOOK_URL }} \
+          curl -X POST "${{ secrets.N8N_WEBHOOK_URL }}" \
           -H "Content-Type: application/json" \
           --data @semgrep-report.json
