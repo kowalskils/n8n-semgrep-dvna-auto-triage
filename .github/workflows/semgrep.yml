@@ -10,7 +10,7 @@ on:
   schedule:
   # random HH:MM to avoid a load spike on GitHub Actions at 00:00
   - cron: 20 11 * * *
-name: Semgrep
+name: Semgrep Security Scan
 jobs:
   semgrep:
     name: semgrep/ci
@@ -22,5 +22,26 @@ jobs:
     container:
       image: semgrep/semgrep
     steps:
-    - uses: actions/checkout@v4
-    - run: semgrep ci
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep Scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/security-audit"
+
+      - name: Export findings JSON
+        run: |
+          semgrep --config=p/security-audit --json > semgrep-report.json
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-report
+          path: semgrep-report.json
+
+      - name: Send findings to n8n webhook
+        run: |
+          curl -X POST ${{ secrets.N8N_WEBHOOK_URL }} \
+          -H "Content-Type: application/json" \
+          --data @semgrep-report.json
