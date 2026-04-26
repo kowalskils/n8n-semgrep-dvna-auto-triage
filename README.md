@@ -1,3 +1,124 @@
+# n8n-semgrep-dvna-auto-triage
+
+> Automated DevSecOps vulnerability triage and remediation orchestration built with n8n, GitHub Actions, Semgrep SAST and GitHub Issues.
+
+<p align="center">
+  <a href="https://youtu.be/ONs2RsDuWzU">▶ Watch Live Demo</a>
+</p>
+
+---
+
+## Overview
+
+Modern AppSec teams often struggle with the repetitive operational burden of manually reviewing SAST findings, classifying vulnerability severity, and opening remediation tickets for engineering teams.
+
+This project demonstrates an automated DevSecOps orchestration pipeline where Semgrep scan results are processed by an n8n workflow and transformed into actionable GitHub remediation issues based on business risk.
+
+The automation performs:
+
+- Automated ingestion of Semgrep SAST findings from GitHub Actions
+- Parsing and normalization of vulnerability metadata
+- Severity-based risk triage logic
+- Individual remediation issue creation for Critical/High findings
+- Consolidated backlog issue creation for Medium/Low findings
+- Automatic remediation labeling and security governance tracking
+
+---
+
+## Architecture
+
+<p align="center">
+  <img src="public/assets/architecture.png" alt="architecture" width="90%">
+</p>
+
+---
+
+## Workflow Automation
+
+<p align="center">
+  <img src="public/assets/workflow.png" alt="workflow" width="100%">
+</p>
+
+---
+
+## Demo Video
+
+Full end-to-end execution demo available here:
+
+▶ https://youtu.be/ONs2RsDuWzU
+
+---
+
+## Technology Stack
+
+- n8n Workflow Automation
+- GitHub Actions
+- GitHub Webhooks
+- Semgrep SAST Scanner
+- DVNA Vulnerable Node.js Application
+- GitHub Issues API
+- Python Data Formatting Nodes
+
+---
+
+## Workflow Logic
+
+### Critical / High Severity Findings
+Security findings classified as critical or high severity are automatically transformed into individual remediation issues containing:
+
+- vulnerability title
+- affected file/path
+- CWE/OWASP mapping
+- business risk context
+- recommended remediation guidance
+
+This simulates the workflow of high-priority AppSec escalation.
+
+### Medium / Low Severity Findings
+Non-critical findings are automatically consolidated into a single remediation backlog issue in order to reduce issue noise while maintaining remediation governance visibility.
+
+This mirrors real-world security debt management practices.
+
+---
+
+## Business Value Demonstrated
+
+This project was designed to simulate how modern security engineering teams reduce manual AppSec triage overhead by integrating CI/CD scanners with workflow automation and engineering remediation channels.
+
+Operational outcomes:
+
+- reduced analyst manual triage time
+- standardized remediation ticket creation
+- improved vulnerability visibility
+- reduced engineering notification fatigue
+- improved remediation backlog governance
+
+---
+
+## Possible Future Enhancements
+
+- CVSS risk scoring enrichment
+- SLA due date automation
+- Jira/ServiceNow integration
+- Slack/MS Teams security notifications
+- DefectDojo synchronization
+- LLM-assisted remediation recommendation
+
+---
+
+## Repository Purpose
+
+This repository was built as a practical demonstration of DevSecOps automation, security workflow orchestration, and AppSec process engineering using n8n as the automation backbone.
+
+---
+
+## Author
+
+Built by Luis S - linkedin.com/in/luis-s-bb7452aa
+
+Security Engineering • IAM • AppSec • DevSecOps Automation
+
+
 # Damn Vulnerable NodeJS Application (DVNA)
 
 ![dvna-logo](docs/resources/dvna.png)
